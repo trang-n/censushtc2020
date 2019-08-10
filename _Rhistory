@@ -1,0 +1,512 @@
+color.map <- function(x, dem, y = NULL) {
+# x <- sp; dem <- sp[[dem]]
+l.poly <- length(x@polygons)
+if ( cuts[[1]]=="manual" ) {
+dem.num <- cut(dem,breaks = cuts[[2]])
+} else {
+dem.num <- cut(dem, breaks = ceiling(do.call(cuts[[1]], list(x = dem, probs = cuts[[2]]))), dig.lab = 6)
+}
+dem.num[which(is.na(dem.num) == TRUE)] <- levels(dem.num)[1]
+l.uc <- length(table(dem.num))
+if (is.null(y)) {
+col.heat <- do.call(color$fun, color$attr)
+}
+else {
+col.heat <- y
+}
+dem.col <- cbind(col.heat, names(table(dem.num)))
+colors.dem <- vector(length = l.poly)
+for (i in 1:l.uc) {
+# 				cat(paste("dem.col[",i,", 2] = ",dem.col[i, 2],"\n",sep=""))
+colors.dem[which(dem.num == dem.col[i, 2])] <- dem.col[i, 1]
+}
+out <- list(colors = colors.dem, dem.cut = dem.col[, 2], table.colors = dem.col[, 1])
+out
+}
+colors.use <- color.map(sp, sp[[dem]])
+col <- colors.use$color
+#args <- list(x = sp, col = colors.use$color)
+args <- list(x = sp, ..., col = colors.use$color)
+do.call("plot", args)
+title(main = main, sub = sub)
+if ( !is.null(cat.labels) ) {
+legend(legend$pos, legend = cat.labels, fill = colors.use$table.colors, bty = "o", title = legend$title, bg = "white")
+} else {
+legend(legend$pos, legend = colors.use$dem.cut, fill = colors.use$table.colors, bty = "o", title = legend$title, bg = "white")
+}
+}
+runApp('sample1')
+install.packages("UScensus2010blkgrp")
+install.packages("UScensus2010blkgrp")
+# library(UScensus2010cdp)
+library(UScensus2010county)
+install.packages("UScensus2010blkgrp")
+shiny::runApp('Shiny-leaflet-Ukaraine-master')
+setwd("C:/Users/emisa/Desktop/bootcamp/Class materials/R/Shiny Project/test")
+runApp()
+runApp()
+runApp()
+leafletProxy("htcmap") %>% addCircles(lng = as.numeric(long_lat$longtitude[long_lat$name == index]),
+lat = as.numeric(long_lat$latitude[long_lat$name == index]),
+weight = 1, radius = sqrt(states_mrr$mrr)*30,
+color = "#FFA500", fillOpacity=0.8) %>%
+addPopups(lng = as.numeric(long_lat$longtitude[long_lat$name == index]),
+lat = as.numeric(long_lat$latitude[long_lat$name == index]))
+leafletProxy("htcmap") %>% addCircles(lng = as.numeric(long_lat$longtitude[long_lat$name == index]),
+lat = as.numeric(long_lat$latitude[long_lat$name == index]),
+weight = 1, radius = sqrt(states_mrr$mrr)*30,
+color = "#FFA500", fillOpacity=0.8) %>%
+addPopups(lng = as.numeric(long_lat$longtitude[long_lat$name == index]),
+lat = as.numeric(long_lat$latitude[long_lat$name == index]))
+htcmap
+htcmap
+renderLeaflet({
+bins <- c(0, 60, 70, 73, 100)
+pal <- colorBin(c("#FED976","#FEB24C" , "#F03B20", "#BD0026"),
+domain = states_mrr$mrr,bins = bins, reverse = TRUE)
+labels <- sprintf("<strong>%s</strong><br/>MRR: %g%%",
+states_mrr$name, states_mrr$mrr) %>% lapply(htmltools::HTML)
+htcmap <- leaflet(states_mrr) %>%
+setView(-96, 37.8, 4) %>%
+addProviderTiles("OpenStreetMap.Mapnik") %>%
+addPolygons(
+fillColor = ~pal(mrr),
+weight = 2,
+opacity = 0.7,
+color = "white",
+dashArray = "3",
+fillOpacity = 0.7,
+highlight = highlightOptions(
+weight = 5,
+color = "#666",
+dashArray = "",
+fillOpacity = 0.7,
+bringToFront = TRUE),
+label = labels,
+labelOptions = labelOptions(
+style = list("font-weight" = "normal", padding = "3px 8px"),
+textsize = "15px",
+direction = "auto")) %>%
+addLegend(pal = pal, values = ~states_mrr$mrr, opacity = 0.7, title = NULL,
+position = "bottomleft" ) %>%
+addEasyButton(easyButton(
+icon="fa-globe", title="Zoom to Level 1",
+onClick=JS("function(btn, map){ map.setZoom(1); }"))) %>%
+addEasyButton(easyButton(
+icon="fa-crosshairs", title="Locate Me",
+onClick=JS("function(btn, map){ map.locate({setView: true}); }")))
+})
+renderLeaflet({
+bins <- c(0, 60, 70, 73, 100)
+pal <- colorBin(c("#FED976","#FEB24C" , "#F03B20", "#BD0026"),
+domain = states_mrr$mrr,bins = bins, reverse = TRUE)
+labels <- sprintf("<strong>%s</strong><br/>MRR: %g%%",
+states_mrr$name, states_mrr$mrr) %>% lapply(htmltools::HTML)
+htcmap <- leaflet(states_mrr) %>%
+setView(-96, 37.8, 4) %>%
+addProviderTiles("OpenStreetMap.Mapnik") %>%
+addPolygons(
+fillColor = ~pal(mrr),
+weight = 2,
+opacity = 0.7,
+color = "white",
+dashArray = "3",
+fillOpacity = 0.7,
+highlight = highlightOptions(
+weight = 5,
+color = "#666",
+dashArray = "",
+fillOpacity = 0.7,
+bringToFront = TRUE),
+label = labels,
+labelOptions = labelOptions(
+style = list("font-weight" = "normal", padding = "3px 8px"),
+textsize = "15px",
+direction = "auto")) %>%
+addLegend(pal = pal, values = ~states_mrr$mrr, opacity = 0.7, title = NULL,
+position = "bottomleft" ) %>%
+addEasyButton(easyButton(
+icon="fa-globe", title="Zoom to Level 1",
+onClick=JS("function(btn, map){ map.setZoom(1); }"))) %>%
+addEasyButton(easyButton(
+icon="fa-crosshairs", title="Locate Me",
+onClick=JS("function(btn, map){ map.locate({setView: true}); }")))
+})
+htcmap
+bins <- c(0, 40, 72, 80, 100)
+pal <- colorBin(c("#FED976","#FEB24C" , "#F03B20", "#BD0026"),
+domain = states_mrr$mrr,bins = bins, reverse = TRUE)
+labels <- sprintf("<strong>%s</strong><br/>MRR: %g%%",
+states_mrr$name, states_mrr$mrr) %>% lapply(htmltools::HTML)
+htcmap <- leaflet(states_mrr) %>%
+setView(-96, 37.8, 4) %>%
+addProviderTiles("Wikimedia", options = providerTileOptions(
+id = "mapbox.light",
+accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
+addPolygons(
+fillColor = ~pal(mrr),
+weight = 2,
+opacity = 0.7,
+color = "white",
+dashArray = "3",
+fillOpacity = 0.7,
+highlight = highlightOptions(
+weight = 5,
+color = "#666",
+dashArray = "",
+fillOpacity = 0.7,
+bringToFront = TRUE),
+label = labels,
+labelOptions = labelOptions(
+style = list("font-weight" = "normal", padding = "3px 8px"),
+textsize = "15px",
+direction = "auto")) %>%
+addLegend(pal = pal, values = ~states_mrr$mrr, opacity = 0.7, title = NULL,
+position = "bottomleft")
+htcmap
+popup = function(state_m){
+if(state_m != "")
+{
+index = which(colnames(graph_df) == state_m)
+leafletProxy("htcmap") %>% addCircles(lng = as.numeric(long_lat$longtitude[long_lat$name == index]),
+lat = as.numeric(long_lat$latitude[long_lat$name == index]),
+weight = 1, radius = sqrt(states_mrr$mrr)*30,
+color = "#FFA500", fillOpacity=0.8) %>%
+addPopups(lng = as.numeric(long_lat$longtitude[long_lat$name == index]),
+lat = as.numeric(long_lat$latitude[long_lat$name == index]))
+} else {
+leafletProxy("htcmap") %>% clearMarkers() %>% clearPopups()
+}
+}
+popup('Alabama')
+popup = function(state_m){
+if(state_m != "")
+{
+index = which(colnames(graph_df) == state_m)
+htcmap %>% addCircles(lng = as.numeric(long_lat$longtitude[long_lat$name == index]),
+lat = as.numeric(long_lat$latitude[long_lat$name == index]),
+weight = 1, radius = sqrt(states_mrr$mrr)*30,
+color = "#FFA500", fillOpacity=0.8) %>%
+addPopups(lng = as.numeric(long_lat$longtitude[long_lat$name == index]),
+lat = as.numeric(long_lat$latitude[long_lat$name == index]))
+} else {
+leafletProxy("htcmap") %>% clearMarkers() %>% clearPopups()
+}
+}
+popup('Alabama')
+runApp()
+runApp()
+runApp()
+graph_df$char_name = ('abs')
+graph_df$char_name = ('abs')
+runApp()
+runApp()
+##global.R
+#install.packages("devtools")
+#install.packages("googleVis")
+# install.packages('shinyHeatmaply')
+#install.packages("geojsonio")
+install.packages("rsconnect")
+install.packages("rsconnect")
+rsconnect::setAccountInfo(name='trang-ng', token='12F8CBC25890FE99D2B509D2339AF8E3', secret='ZiK+jnSL9LRrMl7dphhvVfSuuz9ZmanE+KDr0enM')
+library(rsconnect)
+rsconnect::deployApp('path/to/your/app')
+rsconnect::setAccountInfo(name='trang-ng',
+token='12F8CBC25890FE99D2B509D2339AF8E3',
+secret='<SECRET>')
+library(rsconnect)
+rsconnect::deployApp('path/to/your/app')
+rsconnect::setAccountInfo(name='trang-ng',
+token='12F8CBC25890FE99D2B509D2339AF8E3',
+secret='<SECRET>')
+library(rsconnect)
+rsconnect::deployApp('C:\Users\emisa\Desktop\bootcamp\Class materials\R\Shiny Project\test')
+setwd("C:/Users/emisa/Desktop/bootcamp/Class materials/R/Shiny Project/test")
+getwd()
+library(rsconnect)
+rsconnect::deployApp(getwd())
+runApp()
+runApp()
+library(rsconnect)
+rsconnect::deployApp(getwd())
+View(raw_data)
+View(state_char)
+colnames(raw_data) <- NULL
+colnames(raw_data) <- NULL
+colnames(raw_data) <- NULL
+colnames(raw_data) <- NULL
+#read in files
+raw_data <- read.csv("./data/htc_tract.csv")
+colnames(raw_data) <- NULL
+colnames(raw_data) <- as.character((unlist(raw_data[1,])))
+raw_data[1,]
+raw_data[1,] <- NULL
+raw_data <- raw_data[-1,]
+runApp()
+runApp()
+runApp()
+rownames(raw_data) <- NULL
+runApp()
+library(rsconnect)
+rsconnect::deployApp(getwd())
+###change characteristics
+graph_df$chcharacteristic
+###change characteristics
+graph_df$characteristic
+runApp()
+runApp()
+runApp()
+runApp()
+runApp()
+runApp()
+runApp()
+###calculate poverty rate from raw_data
+raw_data %>% group_by(., Poverty_TOTAL, State_name)
+runApp()
+runApp()
+runApp()
+df <- state_char %>%
+select(., state_name, under_five, HH_rent, no_internet,
+no_comp, non_espeaker, limited_eprof,
+diff_state, respop_abroad, enter2010later)
+df$state_name <- as.character(df$state_name)
+graph_df <- data.frame(characteristic = colnames(df)[-1], t(df[-1]))
+colnames(graph_df)[-1]  <- df[,1]
+rownames(graph_df)<- NULL
+###change characteristics
+graph_df$characteristic
+graph_df$charact <- c("Children under 5 ", "Households occupied by renters ",
+"Households w/o internet ", "Households w/o computer ",
+"Non-english speakers ",
+"Limited English proficiency ", "Residents from different state ",
+"Residents from abroad ", "Residents entered after 2010 ")
+graph_df$charact <- colnames(df)[-1]
+graph_df$charact <- colnames(df)[1]
+graph_df$charact <- c("Children under 5 ", "Households occupied by renters ",
+"Households w/o internet ", "Households w/o computer ",
+"Non-english speakers ",
+"Limited English proficiency ", "Residents from different state ",
+"Residents from abroad ", "Residents entered after 2010 ")
+graph_df$characteristic <- graph_df$charact
+df <- state_char %>%
+select(., state_name, under_five, HH_rent, no_internet,
+no_comp, non_espeaker, limited_eprof,
+diff_state, respop_abroad, enter2010later)
+df$state_name <- as.character(df$state_name)
+graph_df <- data.frame(characteristic = colnames(df)[-1], t(df[-1]))
+colnames(graph_df)[-1]  <- df[,1]
+rownames(graph_df)<- NULL
+###change characteristics
+graph_df$characteristic
+##global.R
+#install.packages("devtools")
+#install.packages("googleVis")
+# install.packages('shinyHeatmaply')
+library(rsconnect)
+library(expss)
+library(ggsci)
+library(geojsonio)
+library(shinyHeatmaply)
+library(googleVis)
+library(tidyverse)
+library(DT)
+library(shinydashboard)
+library(shinythemes)
+library(leaflet)
+library(RColorBrewer)
+#read in files
+raw_data <- read.csv("./data/htc_tract.csv")
+colnames(raw_data) <- as.character((unlist(raw_data[1,])))
+raw_data <- raw_data[-1,]
+rownames(raw_data) <- NULL
+states_mrr <- geojson_read( "./data/us-states.json", what = "sp")
+long_lat <- read.csv("./data/stateLL.csv")
+state_char <- read.csv("./data/social_states.csv")
+nation_char <- read.csv("./data/totalPop.csv")
+state_char <- state_char[,-1]
+state_char <- state_char %>% rename(., state_name = Geography)
+state_char <- state_char %>% rename(., tot_HH = tot_HH.)
+state_char <- state_char %>% rename(., enterb4_2000 = enterb4_2009)
+nation_char <- nation_char %>% rename(., state_name = Geography)
+nation_char <- nation_char %>% rename(., tot_HH = tot_HH.)
+state_char<- rbind(state_char, nation_char)
+state_char <- state_char %>% mutate(., no_internet = 100 - HH_internet)
+state_char <- state_char %>% mutate(., no_comp = 100 - HH_comp)
+###calculate poverty rate from raw_data
+raw_data %>% group_by(., Poverty_TOTAL, State_name)
+choice <- state.name
+choice
+class(choice)
+#declare all variables
+df <- state_char %>%
+select(., state_name, under_five, HH_rent, no_internet,
+no_comp, non_espeaker, limited_eprof,
+diff_state, respop_abroad, enter2010later)
+df$state_name <- as.character(df$state_name)
+graph_df <- data.frame(characteristic = colnames(df)[-1], t(df[-1]))
+colnames(graph_df)[-1]  <- df[,1]
+rownames(graph_df)<- NULL
+###change characteristics
+graph_df$characteristic
+graph_df$charact <- c("Children under 5 ", "Households occupied by renters ",
+"Households w/o internet ", "Households w/o computer ",
+"Non-english speakers ",
+"Limited English proficiency ", "Residents from different state ",
+"Residents from abroad ", "Residents entered after 2010 ")
+#graph_df$characteristic <- graph_df$charact
+graph_df$characteristic <- graph_df$charact
+plt <- googleVis::gvisScatterChart(graph_df)
+plt <- googleVis::gvisHistogram(graph_df)
+ploy(plt)
+plot(plt)
+plt <- googleVis::gvisBubbleChart(graph_df)
+plot(plt)
+plt <- googleVis::gvisColumnChart(graph_df)
+plot(plt)
+View(states_mrr)
+####
+states_mrr$mrr
+####
+states_mrr$name[states_mrr$mrr>72]
+####
+states_mrr$name[states_mrr$mrr<73]
+View(htcmap)
+View(raw_data)
+View(htcmap)
+####
+htc_st <- states_mrr$name[states_mrr$mrr<73]
+####
+htc_st <- as.character(states_mrr$name[states_mrr$mrr<73])
+htc_st
+runApp()
+htc_graph <- graph_df %>% filter(., colnames(graph_df) %in% htc_st)
+htc_graph <- graph_df %>% select(., colnames(graph_df) %in% htc_st)
+htc_graph <- graph_df %>% select(., colnames(graph_df) == htc_st)
+htc_graph <- graph_df %>% select(.,  htc_st)
+htc_st[-"Puert Rico"]
+htc_st[-c("Puert Rico")]
+htc_st(-c("Puert Rico"))
+htc_st
+htc_st[-22]
+htc_st <- htc_st[-22]
+htc_st
+htc_graph <- graph_df %>% select(.,  htc_st)
+htc_graph
+plt <- googleVis::gvisColumnChart(graph_df)
+plot(plt)
+View(htc_graph)
+htc_graph <- graph_df %>% select(.,  charact, htc_st)
+runApp()
+runApp()
+runApp()
+runApp()
+runApp()
+runApp()
+runApp()
+?selectizeInput
+runApp()
+shinyUI(
+###choose theme and title###
+navbarPage(
+title = "Census 2020 Hard to Count Population App",
+theme = shinytheme("flatly"),
+###create welcome tab with brief intro###
+tabPanel("Welcome",
+mainPanel(
+div(
+style = "margin-left: 6%;",
+h3(strong("Welcome to the 2020 Census Hard to Count Shiny App ")),
+br(),
+br(),
+p("This Shiny App maps and graphs the 'hard to count' population state-wise, to provide information
+to local, regional, and national organizations to ensure a fair and accurate count
+for the decennial 2020 Census. "),
+br(),
+h4(strong("What is the 'hard to count' population?")),
+p("In prior censuses, the self-response rate in many parts of the country has been relatively high.
+But in other parts of the country and for some population groups more than others, the
+self-response rate has been relatively low."),
+p(strong("These areas and population groups are considered 'hard to count'.")),
+br(),
+h4(strong("How is hard-to-count population defined?")),
+p("For the HTC map, a state is considered hard-to count if its self-response rate in the 2010
+decennial census was 73% or less. That is, if 73% or fewer of the state's households that
+received a census questionnaire mailed it back to the Census Bureau, it is shaded in light
+orange to dark red on the map. The Bureau ", a("states that these score",
+href = "https://www.census.gov/research/data/planning_database/"),
+"'are highly correlated with census and survey participation.'"),
+p("For the chart, each state's population is visualized by some of the historically undercounted groups such as: young
+children, rural residents; linguistically isolated households; frequent movers;
+and foreign born residents among others."),
+br(),
+h4(strong("Why does it matter?")),
+p("An undercount of the population would have far-reaching consequences. It
+would skew the data that are used to determine how many congressional representatives each state gets and their representation
+in state legislatures and local government bodies."),
+p("It would also shape how billions of dollars are allocated a year, including for schools and hospitals. It would undermine the
+integrity of a wide variety of economic data and other statistics that businesses, researchers and policymakers depend on
+to make decisions."),
+br(),
+h4(strong("Where is the data from?")),
+p("The data was obtained from the", a("U.S. Census Bureau",
+href = "https://www.census.gov/data/datasets/2010/dec/2010-participation-rates.html"),
+"and", a("American FactFinder by the Census Bureau."),
+href = "https://bit.ly/2gghFV3"),
+br(),
+p(strong("Enjoy your visit!"))
+)
+)
+),
+###create hard to count map showing states's Mail return rate
+tabPanel("HTC map", leafletOutput("htcmap", height = 800),
+tags$head(includeCSS('style.css')),
+absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
+draggable = TRUE, top = 80, left = "auto",
+right = 20, bottom = "auto",
+width = 330, height = "auto",
+selectInput("state_m", label = h4("States"),
+choice = c("",state.name ),
+selected = ""),
+htmlOutput("bar_C")
+)),
+###visualizing data by states###
+tabPanel("HTC insight: States",
+sidebarLayout(
+sidebarPanel(width = 2,
+selectizeInput("state_n",
+label = "Select a State",
+choice,
+width = 150)
+),
+###main Panel to display output
+mainPanel(
+htmlOutput("bar")
+))),
+###
+tabPanel("HTC insight: Groups",
+sidebarLayout(
+sidebarPanel(width = 2,
+selectizeInput("groups",
+label = "Select a Group",
+choices = htc_st,
+width = 150)
+),
+###main Panel to display output
+mainPanel(
+htmlOutput("chart")
+))),
+###display data table
+tabPanel("Data",
+fluidPage(
+DT::dataTableOutput("table1"))
+)
+)
+)
+runApp()
+runApp()
+runApp()
+runApp()
+runApp()
+library(rsconnect)
+rsconnect::deployApp('C:\Users\emisa\Desktop\bootcamp\Class materials\R\Shiny Project\test')
+runApp()
